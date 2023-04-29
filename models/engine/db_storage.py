@@ -76,7 +76,7 @@ class DBStorage:
         self.__session.remove()
 
     def get(self, cls, id):
-        """retrieves one object"""
+        """retrieves one  object"""
         if cls in classes.values() and id and type(id) == str:
             db_obj = self.all(cls)
             for k, v in db_obj.items():
