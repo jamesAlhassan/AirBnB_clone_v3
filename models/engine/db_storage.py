@@ -83,3 +83,10 @@ class DBStorage:
                 if k.split('.')[1] == id:
                     return v
         return None
+
+    def count(self, cls=None):
+        """count the number of objects in storage"""
+        all_data = self.all(cls)
+        if cls in classes.values():
+            all_data = self.all(cls)
+        return len(all_data)
