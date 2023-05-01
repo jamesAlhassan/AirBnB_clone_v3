@@ -17,6 +17,7 @@ def closeStorage(ob):
     '''calls storage.close()'''
     storage.close()
 
+
 @app.errorhandler(404)
 def pageNotFound404(error):
     ''' 404 Page Not Found '''
