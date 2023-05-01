@@ -11,7 +11,9 @@ def get_all_states():
     all_states = [ob.to_dict() for ob in storage.all(State).values()]
     return jsonify(all_states)
 
-@app_views.route('/states/<string:state_id>', methods=['GET'], strict_slashes=False)
+
+@app_views.route('/states/<string:state_id>', methods=['GET'],
+                 strict_slashes=False)
 @swag_from('resources/state/getIid.yml', methods=['GET'])
 def getStateId(state_id):
     """ Get state by id"""
