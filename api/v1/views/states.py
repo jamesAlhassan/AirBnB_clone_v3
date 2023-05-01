@@ -56,7 +56,7 @@ def createState():
 
 @app_views.route('/states/<string:state_id>', methods=['PUT'],
                  strict_slashes=False)
-@swag_from('resources/state/put.yml', methods=['PUT'])
+@swag_from('resources/state/update.yml', methods=['PUT'])
 def updateState(state_id):
     """ Update state """
     if not request.get_json():
