@@ -52,3 +52,20 @@ def createState():
     obj = State(**js)
     obj.save()
     return jsonify(obj.to_dict()), 201
+
+
+@app_views.route('/states/<string:state_id>', methods=['PUT'],
+                 strict_slashes=False)
+@swag_from('resources/state/put.yml', methods=['PUT'])
+def updateState(state_id):
+    """ Update state """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    obj = storage.get(State, state_id)
+    if obj is None:
+        abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['id', 'created_at', 'updated']:
+            setattr(obj, key, value)
+    storage.save()
+    return jsonify(obj.to_dict())
