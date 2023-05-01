@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 ''' Route that returns JSON ok status'''
 from api.v1.views import app_views
-from flask import Flask
 from flask import jsonify
 
 
