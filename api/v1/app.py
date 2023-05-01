@@ -23,6 +23,7 @@ def pageNotFound404(error):
     ''' 404 Page Not Found '''
     return make_response(jsonify({"error": "Not found"}), 404)
 
+
 if __name__ == "__main__":
     host = getenv('HBNB_API_HOST')
     port = getenv('HBNB_API_PORT')
