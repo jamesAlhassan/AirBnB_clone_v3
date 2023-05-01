@@ -3,6 +3,7 @@
 from flask import jsonify
 from flasgger.utils import swag_from
 
+
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/state/get.yml', methods=['GET'])
 def get_all_states():
