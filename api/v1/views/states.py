@@ -14,7 +14,7 @@ def get_all_states():
 
 @app_views.route('/states/<string:state_id>', methods=['GET'],
                  strict_slashes=False)
-@swag_from('resources/state/getIid.yml', methods=['GET'])
+@swag_from('resources/state/getId.yml', methods=['GET'])
 def getStateId(state_id):
     """ Get state by id"""
     state = storage.get(State, state_id)
