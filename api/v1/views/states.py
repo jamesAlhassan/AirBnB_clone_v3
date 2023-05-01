@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''states view module'''
-from flask import jsonify, abort
+from flask import jsonify, abort, request, make_response
 from api.v1.views import app_views
 from flasgger.utils import swag_from
 from models import storage
@@ -37,3 +37,18 @@ def deleteState(state_id):
     state.delete()
     storage.save()
     return jsonify({})
+
+
+@app_views.route('/states/', methods=['POST'],
+                 strict_slashes=False)
+@swag_from('resources/state/post.yml', methods=['POST'])
+def createState():
+    """ Create state """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if 'name' not in request.get_json():
+        return make_response(jsonify({"error": "Missing name"}), 400)
+    js = request.get_json()
+    obj = State(**js)
+    obj.save()
+    return jsonify(obj.to_dict()), 201
