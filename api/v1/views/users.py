@@ -26,3 +26,16 @@ def getUser(user_id):
     if user is None:
         abort(404)
     return jsonify(user.to_dict())
+
+
+@app_views.route('/users/<string:user_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('resources/user/deleteUser.yml', methods=['DELETE'])
+def deleteUser(user_id):
+    """ Delete user by id"""
+    user = storage.get(User, user_id)
+    if user is None:
+        abort(404)
+    user.delete()
+    storage.save()
+    return jsonify({})
