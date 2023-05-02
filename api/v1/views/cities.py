@@ -17,3 +17,13 @@ def getCity(state_id):
         abort(404)
     list_cities = [obj.to_dict() for obj in state.cities]
     return jsonify(list_cities)
+
+@app_views.route('/cities/<string:city_id>', methods=['GET'],
+                 strict_slashes=False)
+@swag_from('resources/city/getCityId.yml', methods=['GET'])
+def getCityId(city_id):
+    """ Get city by id"""
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+    return jsonify(city.to_dict())
