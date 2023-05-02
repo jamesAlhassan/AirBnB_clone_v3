@@ -15,3 +15,14 @@ def getAmenities():
     """ Get amenities by id """
     all_list = [obj.to_dict() for obj in storage.all(Amenity).values()]
     return jsonify(all_list)
+
+
+@app_views.route('/amenities/<string:amenity_id>', methods=['GET'],
+                 strict_slashes=False)
+@swag_from('resources/amenity/getAmenityId.yml', methods=['GET'])
+def getAmenity(amenity_id):
+    """ Get amenity by id"""
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    return jsonify(amenity.to_dict())
