@@ -31,7 +31,7 @@ def getCityId(city_id):
 
 @app_views.route('/cities/<string:city_id>', methods=['DELETE'],
                  strict_slashes=False)
-@swag_from('resources/city/delete.yml', methods=['DELETE'])
+@swag_from('resources/city/deleteCity.yml', methods=['DELETE'])
 def deleteCity(city_id):
     """ Delete city by id"""
     city = storage.get(City, city_id)
@@ -40,3 +40,23 @@ def deleteCity(city_id):
     city.delete()
     storage.save()
     return jsonify({})
+
+
+@app_views.route('/states/<string:state_id>/cities', methods=['POST'],
+                 strict_slashes=False)
+@swag_from('resources/city/post.yml', methods=['POST'])
+def createCity(state_id):
+    """ Create City """
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if 'name' not in request.get_json():
+        return make_response(jsonify({"error": "Missing name"}), 400)
+
+    js = request.get_json()
+    ob = City(**js)
+    ob.state_id = state.id
+    ob.save()
+    return jsonify(ob.to_dict()), 201
