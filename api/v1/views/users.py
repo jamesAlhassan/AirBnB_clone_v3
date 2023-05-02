@@ -39,3 +39,20 @@ def deleteUser(user_id):
     user.delete()
     storage.save()
     return jsonify({})
+
+
+@app_views.route('/users/', methods=['POST'],
+                 strict_slashes=False)
+@swag_from('resources/user/post.yml', methods=['POST'])
+def createUser():
+    """ Creates new User """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if 'email' not in request.get_json():
+        return make_response(jsonify({"error": "Missing email"}), 400)
+    if 'password'not in request.get_json():
+        return make_response(jsonify({"error": "Missing password"}), 400)
+    js = request.get_json()
+    obj = User(**js)
+    obj.save()
+    return (jsonify(obj.to_dict()), 201)
