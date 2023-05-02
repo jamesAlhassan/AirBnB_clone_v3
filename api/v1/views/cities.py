@@ -7,6 +7,7 @@ from models import storage
 from models.state import State
 from models.city import City
 
+
 @app_views.route('/states/<string:state_id>/cities',
                  methods=['GET'], strict_slashes=False)
 @swag_from('resources/city/get.yml', methods=['GET'])
@@ -17,6 +18,7 @@ def getCity(state_id):
         abort(404)
     list_cities = [obj.to_dict() for obj in state.cities]
     return jsonify(list_cities)
+
 
 @app_views.route('/cities/<string:city_id>', methods=['GET'],
                  strict_slashes=False)
