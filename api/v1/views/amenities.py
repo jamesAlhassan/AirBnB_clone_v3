@@ -26,3 +26,16 @@ def getAmenity(amenity_id):
     if amenity is None:
         abort(404)
     return jsonify(amenity.to_dict())
+
+
+@app_views.route('/amenities/<string:amenity_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('resources/amenity/deleteAmenity.yml', methods=['DELETE'])
+def deleteAmenity(amenity_id):
+    """ Deletes amenity by id"""
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
+    amenity.delete()
+    storage.save()
+    return jsonify({})
