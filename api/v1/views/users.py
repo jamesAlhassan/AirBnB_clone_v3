@@ -15,3 +15,14 @@ def getUsers():
     """ Get users"""
     all_users = [obj.to_dict() for obj in storage.all(User).values()]
     return jsonify(all_list)
+
+
+@app_views.route('/users/<string:user_id>', methods=['GET'],
+                 strict_slashes=False)
+@swag_from('resources/user/getUserId.yml', methods=['GET'])
+def getUser(user_id):
+    """ Get user by id"""
+    user = storage.get(User, user_id)
+    if user is None:
+        abort(404)
+    return jsonify(user.to_dict())
