@@ -27,3 +27,16 @@ def getCityId(city_id):
     if city is None:
         abort(404)
     return jsonify(city.to_dict())
+
+
+@app_views.route('/cities/<string:city_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('resources/city/delete.yml', methods=['DELETE'])
+def deleteCity(city_id):
+    """ Delete city by id"""
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+    city.delete()
+    storage.save()
+    return jsonify({})
