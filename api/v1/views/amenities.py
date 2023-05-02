@@ -54,3 +54,20 @@ def createAmenity():
     obj = Amenity(**js)
     obj.save()
     return (jsonify(obj.to_dict()), 201)
+
+
+@app_views.route('/amenities/<string:amenity_id>', methods=['PUT'],
+                 strict_slashes=False)
+@swag_from('resources/amenity/updateAmenity.yml', methods=['PUT'])
+def updateAmenity(amenity_id):
+    """Update Amenity  """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    obj = storage.get(Amenity, amenity_id)
+    if obj is None:
+        abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['id', 'created_at', 'updated_at']:
+            setattr(obj, key, value)
+    storage.save()
+    return jsonify(obj.to_dict())
