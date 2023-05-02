@@ -39,3 +39,18 @@ def deleteAmenity(amenity_id):
     amenity.delete()
     storage.save()
     return jsonify({})
+
+
+@app_views.route('/amenities/', methods=['POST'],
+                 strict_slashes=False)
+@swag_from('resources/amenity/post.yml', methods=['POST'])
+def createAmenity():
+    """ Creates Amenity """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if 'name' not in request.get_json():
+        return make_response(jsonify({"error": "Missing name"}), 400)
+    js = request.get_json()
+    obj = Amenity(**js)
+    obj.save()
+    return (jsonify(obj.to_dict()), 201)
