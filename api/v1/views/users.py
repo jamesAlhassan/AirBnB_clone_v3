@@ -56,3 +56,20 @@ def createUser():
     obj = User(**js)
     obj.save()
     return (jsonify(obj.to_dict()), 201)
+
+
+@app_views.route('/users/<string:user_id>', methods=['PUT'],
+                 strict_slashes=False)
+@swag_from('resources/user/updateUser.yml', methods=['PUT'])
+def updateUser(user_id):
+    """Update User  """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    obj = storage.get(User, user_id)
+    if obj is None:
+        abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['id', 'email', 'created_at', 'updated']:
+            setattr(obj, key, value)
+    storage.save()
+    return jsonify(obj.to_dict())
