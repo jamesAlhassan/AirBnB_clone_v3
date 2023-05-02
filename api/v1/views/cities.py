@@ -60,3 +60,20 @@ def createCity(state_id):
     ob.state_id = state.id
     ob.save()
     return jsonify(ob.to_dict()), 201
+
+
+@app_views.route('/cities/<string:city_id>', methods=['PUT'],
+                 strict_slashes=False)
+@swag_from('resources/city/updateCity.yml', methods=['PUT'])
+def Updatecity(city_id):
+    """Update City  """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    obj = storage.get(City, city_id)
+    if obj is None:
+        abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['id', 'state_id', 'created_at', 'updated_at']:
+            setattr(obj, key, value)
+    storage.save()
+    return jsonify(obj.to_dict())
