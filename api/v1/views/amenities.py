@@ -13,8 +13,8 @@ from models.amenity import Amenity
 @swag_from('resources/amenity/get.yml', methods=['GET'])
 def getAmenities():
     """ Get amenities by id """
-    all_list = [obj.to_dict() for obj in storage.all(Amenity).values()]
-    return jsonify(all_list)
+    all_amenities = [obj.to_dict() for obj in storage.all(Amenity).values()]
+    return jsonify(all_amenities)
 
 
 @app_views.route('/amenities/<string:amenity_id>', methods=['GET'],

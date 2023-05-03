@@ -16,8 +16,8 @@ def getCity(state_id):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    list_cities = [obj.to_dict() for obj in state.cities]
-    return jsonify(list_cities)
+    all_cities = [obj.to_dict() for obj in state.cities]
+    return jsonify(all_cities)
 
 
 @app_views.route('/cities/<string:city_id>', methods=['GET'],
