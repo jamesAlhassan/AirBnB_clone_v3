@@ -32,3 +32,16 @@ def get_review(review_id):
     if review is None:
         abort(404)
     return jsonify(review.to_dict())
+
+
+@app_views.route('/reviews/<string:review_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('resources/reviews/deleteReview.yml', methods=['DELETE'])
+def deleteReview(review_id):
+    """ Delete review by id"""
+    review = storage.get(Review, review_id)
+    if review is None:
+        abort(404)
+    review.delete()
+    storage.save()
+    return jsonify({})
