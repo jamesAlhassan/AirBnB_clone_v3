@@ -69,3 +69,20 @@ def createReview(place_id):
     obj = Review(**kwargs)
     obj.save()
     return (jsonify(obj.to_dict()), 201)
+
+
+@app_views.route('/reviews/<string:review_id>', methods=['PUT'],
+                 strict_slashes=False)
+@swag_from('resources/reviews/updateReview.yml', methods=['PUT'])
+def upateReview(review_id):
+    """ Update review by id """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    obj = storage.get(Review, review_id)
+    if obj is None:
+        abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['id', 'user_id', 'place_id', 'created_at', 'updated']:
+            setattr(obj, key, value)
+    storage.save()
+    return jsonify(obj.to_dict())
