@@ -47,3 +47,27 @@ def deletePlace(place_id):
     place.delete()
     storage.save()
     return jsonify({})
+
+
+@app_views.route('/cities/<string:city_id>/places', methods=['POST'],
+                 strict_slashes=False)
+@swag_from('resources/places/post.yml', methods=['POST'])
+def createPlace(city_id):
+    """ Create new place """
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if 'user_id' not in request.get_json():
+        return make_response(jsonify({"error": "Missing user_id"}), 400)
+    if 'name' not in request.get_json():
+        return make_response(jsonify({"error": "Missing name"}), 400)
+    kwargs = request.get_json()
+    kwargs['city_id'] = city_id
+    user = storage.get(User, kwargs['user_id'])
+    if user is None:
+        abort(404)
+    obj = Place(**kwargs)
+    obj.save()
+    return (jsonify(obj.to_dict()), 201)
