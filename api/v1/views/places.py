@@ -92,9 +92,9 @@ def post_place(place_id):
 
 @app_views.route('/places_search', methods=['POST'],
                  strict_slashes=False)
-@swag_from('resources/places/find.yml', methods=['POST'])
+@swag_from('resources/places/findPlace.yml', methods=['POST'])
 def search_places_by_id():
-    """ Fin places by id """
+    """ Find places by id """
     if request.get_json() is None:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
