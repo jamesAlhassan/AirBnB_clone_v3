@@ -34,3 +34,16 @@ def getPlaceId(place_id):
     if place is None:
         abort(404)
     return jsonify(place.to_dict())
+
+
+@app_views.route('/places/<string:place_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('resources/places/deletePlace.yml', methods=['DELETE'])
+def deletePlace(place_id):
+    """ Delete place by id """
+    place = storage.get(Place, place_id)
+    if place is None:
+        abort(404)
+    place.delete()
+    storage.save()
+    return jsonify({})
