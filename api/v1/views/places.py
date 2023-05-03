@@ -70,4 +70,21 @@ def createPlace(city_id):
         abort(404)
     obj = Place(**kwargs)
     obj.save()
+
+
+@app_views.route('/places/<string:place_id>', methods=['PUT'],
+                 strict_slashes=False)
+@swag_from('resources/places/updatePlace.yml', methods=['PUT'])
+def post_place(place_id):
+    """ Update by id """
+    if not request.get_json():
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    obj = storage.get(Place, place_id)
+    if obj is None:
+        abort(404)
+    for key, value in request.get_json().items():
+        if key not in ['id', 'user_id', 'city_id', 'created_at', 'updated']:
+            setattr(obj, key, value)
+    storage.save()
+    return jsonify(obj.to_dict())
     return (jsonify(obj.to_dict()), 201)
