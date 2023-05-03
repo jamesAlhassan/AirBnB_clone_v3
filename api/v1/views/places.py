@@ -23,3 +23,14 @@ def getPlace(city_id):
         abort(404)
     places = [obj.to_dict() for obj in city.places]
     return jsonify(places)
+
+
+@app_views.route('/places/<string:place_id>', methods=['GET'],
+                 strict_slashes=False)
+@swag_from('resources/places/getPlaceId.yml', methods=['GET'])
+def getPlaceId(place_id):
+    """ Get place by id """
+    place = storage.get(Place, place_id)
+    if place is None:
+        abort(404)
+    return jsonify(place.to_dict())
