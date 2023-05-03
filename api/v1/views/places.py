@@ -11,3 +11,15 @@ from models.city import City
 from models.user import User
 from models.amenity import Amenity
 from models.state import State
+
+
+@app_views.route('/cities/<string:city_id>/places',
+                 methods=['GET'], strict_slashes=False)
+@swag_from('resources/places/getPlace.yml', methods=['GET'])
+def getPlace(city_id):
+    """ Get places by id """
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+    places = [obj.to_dict() for obj in city.places]
+    return jsonify(places)
